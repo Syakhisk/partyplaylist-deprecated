@@ -1,6 +1,5 @@
 import { addDoc, collection } from "firebase/firestore";
 import { toast } from "react-toastify";
-import { router } from "../main";
 import { COLLECTION_NAME, db } from "./firebase";
 import { generateSessionCode } from "./helper";
 
@@ -31,7 +30,8 @@ export const handleCreateSession = async (usernameRef, sessionNameRef) => {
       type: "success",
       isLoading: false,
     });
-    router.navigate(`/listen/${sessionCode}`);
+
+    window.location.replace(`/listen/${sessionCode}`);
   } catch (e) {
     console.error(e);
     toast.update(toastId, {
