@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  background: theme("colors.gray.900");
+  color: theme("colors.white");
+}
+
+input {
+  border: 1px solid theme("colors.gray.500");
+  border-radius: theme("borderRadius.sm");
+  padding: 4px;
+  background: transparent;
+}
+
 .youtubeContainer {
   position: relative;
   width: 100%;
