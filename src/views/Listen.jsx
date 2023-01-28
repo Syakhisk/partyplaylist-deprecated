@@ -11,12 +11,13 @@ import Queue from "../components/Queue";
 import { sessionAtom, useSessionStore } from "../lib/store";
 import { useAtom } from "jotai";
 import { isEmptyObject } from "../lib/helper";
+import Player from "../components/Player";
 
 const Listen = () => {
-  const inputRef = useRef(null);
-  const [session, setSession] = useAtom(sessionAtom);
-  const setSessionS = useSessionStore((s) => s.setSession);
   const { sessionId } = useParams();
+  const inputRef = useRef(null);
+  const session = useSessionStore((s) => s.session);
+  const setSession = useSessionStore((s) => s.setSession);
 
   const [sessionRef, loading, error] = useDocument(
     doc(db, COLLECTION_NAME, sessionId)
@@ -24,12 +25,7 @@ const Listen = () => {
 
   useEffect(() => {
     if (sessionRef) {
-      console.log(sessionRef.data());
       setSession({
-        ...sessionRef.data(),
-        id: sessionRef.id,
-      });
-      setSessionS({
         ...sessionRef.data(),
         id: sessionRef.id,
       });
@@ -78,6 +74,7 @@ const Listen = () => {
           </button>
         </div>
 
+        <Player />
         <Queue />
       </div>
     </Layout>
