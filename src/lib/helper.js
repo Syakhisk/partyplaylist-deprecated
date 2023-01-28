@@ -34,3 +34,5 @@ export const generateSessionCode = async () => {
 
   return id;
 };
+
+export const isEmptyObject = (obj) => Object.keys(obj).length === 0;

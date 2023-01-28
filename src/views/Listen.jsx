@@ -1,4 +1,3 @@
-import { doc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import { useDocument } from "react-firebase-hooks/firestore";
 import { useParams } from "react-router-dom";
@@ -6,28 +5,38 @@ import Layout from "../components/Layout";
 import { COLLECTION_NAME, db } from "../lib/firebase";
 import { BackwardIcon, ForwardIcon, PlayIcon } from "@heroicons/react/20/solid";
 import { handleQueueAdd } from "../lib/handler";
+import Loading from "../components/Loading";
+import { doc } from "firebase/firestore";
+import Queue from "../components/Queue";
+import { sessionAtom, useSessionStore } from "../lib/store";
+import { useAtom } from "jotai";
+import { isEmptyObject } from "../lib/helper";
 
 const Listen = () => {
   const inputRef = useRef(null);
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useAtom(sessionAtom);
+  const setSessionS = useSessionStore((s) => s.setSession);
   const { sessionId } = useParams();
+
   const [sessionRef, loading, error] = useDocument(
     doc(db, COLLECTION_NAME, sessionId)
   );
 
   useEffect(() => {
     if (sessionRef) {
-      setSession({ ...sessionRef.data(), id: sessionRef.id });
+      console.log(sessionRef.data());
+      setSession({
+        ...sessionRef.data(),
+        id: sessionRef.id,
+      });
+      setSessionS({
+        ...sessionRef.data(),
+        id: sessionRef.id,
+      });
     }
   }, [sessionRef]);
 
-  if (!session) {
-    return (
-      <>
-        <div>Loading...</div>
-      </>
-    );
-  }
+  if (isEmptyObject(session)) return <Loading />;
 
   return (
     <Layout>
@@ -69,14 +78,7 @@ const Listen = () => {
           </button>
         </div>
 
-        <div className="border w-full mt-4 rounded p-4 pt-8 relative">
-          <div className="absolute inset-0 p-1 px-4 text-xs bg-dim/50 w-fit h-fit rounded-br">
-            Queue
-          </div>
-          {sessionRef.get("queue").map((i, idx) => (
-            <div key={idx}>{i.title}</div>
-          ))}
-        </div>
+        <Queue />
       </div>
     </Layout>
   );
