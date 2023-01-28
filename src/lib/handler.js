@@ -1,7 +1,41 @@
-import { addDoc, collection } from "firebase/firestore";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { toast } from "react-toastify";
 import { COLLECTION_NAME, db } from "./firebase";
-import { generateSessionCode } from "./helper";
+import { generateSessionCode, getVideoDetails } from "./helper";
+import { _t } from "./toast";
+
+export const handleQueueAdd = async (value, docId) => {
+  const toastId = _t.loading("Loading...");
+
+  if (!value) return _t.fail(toastId, "Error");
+
+  try {
+    const res = await getVideoDetails(value);
+
+    const url = new URL(value);
+    const sp = new URLSearchParams(url.searchParams);
+
+    const docRef = await updateDoc(doc(db, COLLECTION_NAME, docId), {
+      // code: sessionCode,
+      // host: usernameRef.current.value,
+      // users: [{ name: usernameRef.current.value }],
+      queue: arrayUnion({
+        ...res.data,
+        id: sp.get("v"),
+      }),
+    });
+    return _t.success(toastId, "Success");
+  } catch (e) {
+    _t.fail(toastId, "Error");
+    console.error(e);
+  }
+};
 
 export const handleCreateSession = async (usernameRef, sessionNameRef) => {
   if (usernameRef.current.value == "") {
