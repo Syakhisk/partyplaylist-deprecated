@@ -14,7 +14,8 @@ const Player = () => {
         className={"youtubeContainer"}
         opts={{
           playerVars: {
-            autoplay: 1,
+            // autoplay: 1,
+            autoplay: 0,
             controls: 0,
             modestbranding: 1,
             enablejsapi: 1,
