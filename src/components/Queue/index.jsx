@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import useSessionStore from "../../lib/stores/session-store";
 import QueueItem from "./QueueItem";
 

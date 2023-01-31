@@ -27,6 +27,7 @@ const Player = () => {
         opts={{
           playerVars: {
             // autoplay: 1,
+            mute: 1,
             autoplay: 0,
             controls: 0,
             modestbranding: 1,

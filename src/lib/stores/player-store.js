@@ -18,6 +18,7 @@ const usePlayerStore = create((set, get) => ({
   duration: 0,
   progress: 0,
   isPlaying: false,
+  isMuted: true,
   action: {
     // TODO: need to check if host
     play: () => {
@@ -51,6 +52,15 @@ const usePlayerStore = create((set, get) => ({
         current_song_id: queue[newIndex]?.id ?? null,
         current_song_status: "playing",
       });
+    },
+    toggleMute: () => {
+      const { player } = get();
+      const isMuted = player.isMuted();
+
+      if (isMuted) player.unMute();
+      else player.mute();
+
+      set(() => ({ isMuted: !!isMuted }));
     },
   },
   handleStateChange: async (event) => {

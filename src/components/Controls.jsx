@@ -3,6 +3,8 @@ import {
   ForwardIcon,
   PauseIcon,
   PlayIcon,
+  SpeakerWaveIcon,
+  SpeakerXMarkIcon,
 } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import usePlayerStore from "../lib/stores/player-store";
@@ -26,6 +28,7 @@ const Controls = () => {
         <PrevButton />
         <PlayPauseButton />
         <NextButton />
+        <MuteButton />
 
         <div
           className="w-full h-1 absolute bottom-0 left-0 bg-primary z-10"
@@ -65,6 +68,21 @@ const NextButton = () => {
   const cn = clsx(["h-6", isLastSong() && "opacity-50"]);
 
   return <ForwardIcon className={cn} onClick={playerAction.next} />;
+};
+
+const MuteButton = () => {
+  const playerAction = usePlayerStore((s) => s.action);
+  const isMuted = usePlayerStore((s) => s.isMuted);
+  const cn = clsx(["h-6"]);
+  if (isMuted)
+    return (
+      <SpeakerXMarkIcon
+        className={clsx(cn, "opacity-50")}
+        onClick={playerAction.toggleMute}
+      />
+    );
+
+  return <SpeakerWaveIcon className={cn} onClick={playerAction.toggleMute} />;
 };
 
 const Skeleton = () => (
