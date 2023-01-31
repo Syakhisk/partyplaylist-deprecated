@@ -22,7 +22,7 @@ const Player = () => {
     <div className="w-96 border">
       <YouTube
         // videoId={"2g811Eo7K8U"}
-        videoId={currentSong.id}
+        videoId={currentSong?.id}
         className={"youtubeContainer"}
         opts={{
           playerVars: {

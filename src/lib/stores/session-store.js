@@ -9,12 +9,14 @@ const useSessionStore = create((set, get) => ({
   currentSong: null,
   setSession: (newSession) => {
     set(() => {
+      const currentSong =
+        newSession.queue.find((i) => i.id == newSession.current_song_id) ??
+        newSession.queue[0];
+
       return {
         session: newSession ?? {},
         queue: newSession.queue ?? [],
-        currentSong: newSession.queue.find(
-          (i) => i.id == newSession.current_song_id
-        ),
+        currentSong,
       };
     });
   },
@@ -24,6 +26,12 @@ const useSessionStore = create((set, get) => ({
 
     return queue?.find((item) => item.id == current_song_id);
   },
+  getCurrentSongIndex: () => {
+    const { session, queue } = get();
+    const { current_song_id } = session;
+
+    return queue?.findIndex((item) => item.id == current_song_id);
+  },
   getSongById: (id) => {
     const { queue } = get();
 
@@ -31,12 +39,12 @@ const useSessionStore = create((set, get) => ({
   },
   isFirstSong: () => {
     const { currentSong, queue } = get();
-    return queue.findIndex((item) => item.id == currentSong.id) == 0;
+    return queue.findIndex((item) => item.id == currentSong?.id) == 0;
   },
   isLastSong: () => {
     const { currentSong, queue } = get();
     return (
-      queue.findIndex((item) => item.id == currentSong.id) == queue.length - 1
+      queue.findIndex((item) => item.id == currentSong?.id) == queue.length - 1
     );
   },
   queueUp: (id) => {

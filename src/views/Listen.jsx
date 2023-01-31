@@ -14,6 +14,7 @@ import { COLLECTION_NAME, db } from "../lib/firebase";
 import { isEmptyObject } from "../lib/helper";
 import Controls from "../components/Controls";
 import useSessionStore from "../lib/stores/session-store";
+import usePlayerStore from "../lib/stores/player-store";
 
 const Listen = () => {
   const { sessionId } = useParams();
@@ -22,12 +23,18 @@ const Listen = () => {
   const session = useSessionStore((s) => s.session);
   const setSession = useSessionStore((s) => s.setSession);
 
+  const handleStateChange = usePlayerStore((s) => s.handleStateChange);
+
   useEffect(() => {
     if (sessionRef) {
+      const data = sessionRef.data();
       setSession({
-        ...sessionRef.data(),
+        ...data,
         id: sessionRef.id,
       });
+
+      const playingState = data.current_song_status == "playing" ? 1 : -1;
+      handleStateChange({ data: playingState });
     }
   }, [sessionRef]);
 
