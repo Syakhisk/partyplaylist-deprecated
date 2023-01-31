@@ -11,9 +11,9 @@ import SessionInfo from "../components/SessionInfo";
 import Queuer from "../components/Queuer";
 
 import { COLLECTION_NAME, db } from "../lib/firebase";
-import { useSessionStore } from "../lib/store";
 import { isEmptyObject } from "../lib/helper";
 import Controls from "../components/Controls";
+import useSessionStore from "../lib/stores/session-store";
 
 const Listen = () => {
   const { sessionId } = useParams();
@@ -37,10 +37,10 @@ const Listen = () => {
     <Layout>
       <div className="flex flex-col items-center p-4 gap-4">
         <SessionInfo />
-        <Player />
         <Controls />
         <Queuer />
         <Queue />
+        <Player />
       </div>
     </Layout>
   );

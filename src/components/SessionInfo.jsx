@@ -1,9 +1,9 @@
-import { useSessionStore } from "../lib/store";
+import useSessionStore from "../lib/stores/session-store";
 
 const SessionInfo = () => {
   const session = useSessionStore((s) => s.session);
   return (
-    <div className="flex flex-wrap gap-4 justify-around border rounded max-w-xl overflow-ellipsis p-4 w-full">
+    <div className="flex flex-wrap gap-4 justify-around border rounded overflow-ellipsis p-4 w-full">
       <div className="w-full text-center text-2xl font-mono border rounded p-2">
         {session.name}
       </div>

@@ -1,16 +1,28 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import YouTube from "react-youtube";
-import { useSessionStore } from "../lib/store";
+import usePlayerStore from "../lib/stores/player-store";
+import useSessionStore from "../lib/stores/session-store";
 
 const Player = () => {
-  const [player, setPlayer] = useState();
-  const queue = useSessionStore((s) => s.session.queue);
+  const setPlayer = usePlayerStore((s) => s.setPlayer);
+  const update = usePlayerStore((s) => s.update);
+  const handleStateChange = usePlayerStore((s) => s.handleStateChange);
+  const currentSong = useSessionStore((s) => s.currentSong);
+
+  // Update player state every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      update();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="w-96 border">
       <YouTube
         // videoId={"2g811Eo7K8U"}
-        videoId={queue.at(0)?.id}
+        videoId={currentSong.id}
         className={"youtubeContainer"}
         opts={{
           playerVars: {
@@ -23,6 +35,7 @@ const Player = () => {
           },
         }}
         onReady={(event) => setPlayer(event.target)}
+        onStateChange={handleStateChange}
         // id={string} // defaults -> ''
         // className={string} // defaults -> ''
         // iframeClassName={string} // defaults -> ''
