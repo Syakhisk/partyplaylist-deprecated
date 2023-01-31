@@ -1,6 +1,6 @@
 import axios from "axios";
-import { collection, getDocs, limit, query, where } from "firebase/firestore";
-import { db } from "./firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { COLLECTION_NAME, db } from "./firebase";
 
 export const getVideoDetails = async (url) => {
   // https://www.youtube.com/oembed?url=http%3A//youtube.com/watch%3Fv%3DM3r2XDceM6A&format=json
@@ -14,22 +14,17 @@ export const getVideoDetails = async (url) => {
   });
 };
 
-export const createSession = async (id) => {};
-
 export const generateSessionCode = async () => {
-  const _generate = () => Math.floor(1000 + Math.random() * 90000);
-  let id = _generate();
+  const _generate = () => Math.random().toString().slice(2, 8);
+  let id = null;
   let exists = true;
 
   do {
-    const q = query(
-      collection(db, "partyplaylist-sessions"),
-      where("code", "==", id),
-      limit(1)
-    );
+    id = _generate();
+    while (id.length < 6) id = _generate();
 
-    const docs = await getDocs(q);
-    exists = !docs.empty;
+    let _doc = await getDoc(doc(db, COLLECTION_NAME, id));
+    exists = _doc.exists();
   } while (exists);
 
   return id;

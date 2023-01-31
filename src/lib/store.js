@@ -1,17 +1,6 @@
 import { doc, updateDoc } from "firebase/firestore";
-import { atom } from "jotai";
 import { create } from "zustand";
 import { COLLECTION_NAME, db } from "./firebase";
-
-export const sessionCode = atom(null);
-
-export const sessionAtom = atom({});
-
-export const queueAtom = atom(
-  (get) => get(sessionAtom).queue,
-  (get, set, newQueue) =>
-    set(sessionAtom, { ...get(sessionAtom), queue: newQueue })
-);
 
 export const useSessionStore = create((set) => ({
   session: {},

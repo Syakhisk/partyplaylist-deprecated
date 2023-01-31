@@ -1,26 +1,26 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useDocument } from "react-firebase-hooks/firestore";
 import { useParams } from "react-router-dom";
-import Layout from "../components/Layout";
-import { COLLECTION_NAME, db } from "../lib/firebase";
-import { BackwardIcon, ForwardIcon, PlayIcon } from "@heroicons/react/20/solid";
-import { handleQueueAdd } from "../lib/handler";
-import Loading from "../components/Loading";
 import { doc } from "firebase/firestore";
+
+import Player from "../components/Player";
+import Layout from "../components/Layout";
+import Loading from "../components/Loading";
 import Queue from "../components/Queue";
+import SessionInfo from "../components/SessionInfo";
+import Queuer from "../components/Queuer";
+
+import { COLLECTION_NAME, db } from "../lib/firebase";
 import { useSessionStore } from "../lib/store";
 import { isEmptyObject } from "../lib/helper";
-import Player from "../components/Player";
+import Controls from "../components/Controls";
 
 const Listen = () => {
   const { sessionId } = useParams();
-  const inputRef = useRef(null);
+  const [sessionRef] = useDocument(doc(db, COLLECTION_NAME, sessionId));
+
   const session = useSessionStore((s) => s.session);
   const setSession = useSessionStore((s) => s.setSession);
-
-  const [sessionRef, loading, error] = useDocument(
-    doc(db, COLLECTION_NAME, sessionId)
-  );
 
   useEffect(() => {
     if (sessionRef) {
@@ -35,45 +35,11 @@ const Listen = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col items-center p-4">
-        <div className="flex flex-wrap gap-4 justify-around border rounded max-w-xl overflow-ellipsis p-4 w-full">
-          <div className="w-full text-center text-2xl font-mono border rounded p-2">
-            {session.name}
-          </div>
-
-          <div className="text-center">
-            <div className="text-xs text-dim">Session ID</div>
-            <div>#{sessionId}</div>
-          </div>
-
-          <div className="text-left flex-grow overflow-hidden">
-            <div className="text-xs text-dim">Host</div>
-            <div>{session.host}</div>
-          </div>
-        </div>
-
-        <div className="mt-4 flex gap-8 border rounded p-4 px-8 items-center">
-          <BackwardIcon className="h-6" />
-          <PlayIcon className="h-8" />
-          <ForwardIcon className="h-6" />
-        </div>
-
-        <div className="border focus-within:border-primary rounded transition-all mt-4">
-          <input
-            type="text"
-            placeholder="Enter a youtube url"
-            ref={inputRef}
-            className="peer border-none active:outline-none focus:outline-none px-2 focus:placeholder:opacity-0"
-          />
-          <button
-            onClick={() => handleQueueAdd(inputRef.current.value, sessionId)}
-            className="p-2 bg-dim/50 peer-focus:bg-primary focus:bg-primary transition-all"
-          >
-            Queue
-          </button>
-        </div>
-
+      <div className="flex flex-col items-center p-4 gap-4">
+        <SessionInfo />
         <Player />
+        <Controls />
+        <Queuer />
         <Queue />
       </div>
     </Layout>
