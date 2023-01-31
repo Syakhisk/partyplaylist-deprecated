@@ -32,6 +32,26 @@ const usePlayerStore = create((set, get) => ({
       get().player?.stopVideo();
       updatePlayingStateOnFirestore("ended");
     },
+    next: () => {
+      const { queue, getCurrentSongIndex } = useSessionStore.getState();
+      let newIndex = getCurrentSongIndex() + 1;
+      if (newIndex >= queue.length) newIndex = 0;
+
+      updateFirestoreData({
+        current_song_id: queue[newIndex]?.id ?? null,
+        current_song_status: "playing",
+      });
+    },
+    prev: () => {
+      const { queue, getCurrentSongIndex } = useSessionStore.getState();
+      let newIndex = getCurrentSongIndex() + 1;
+      if (newIndex < 0) newIndex = queue.length - 1;
+
+      updateFirestoreData({
+        current_song_id: queue[newIndex]?.id ?? null,
+        current_song_status: "playing",
+      });
+    },
   },
   handleStateChange: async (event) => {
     //TODO: handle when song finished

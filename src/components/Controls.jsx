@@ -53,14 +53,18 @@ const PlayPauseButton = () => {
 
 const PrevButton = () => {
   const isFirstSong = useSessionStore((s) => s.isFirstSong);
+  const playerAction = usePlayerStore((s) => s.action);
   const cn = clsx(["h-6", isFirstSong() && "opacity-50"]);
-  return <BackwardIcon className={cn} />;
+
+  return <BackwardIcon className={cn} onClick={playerAction.prev} />;
 };
 
 const NextButton = () => {
   const isLastSong = useSessionStore((s) => s.isLastSong);
+  const playerAction = usePlayerStore((s) => s.action);
   const cn = clsx(["h-6", isLastSong() && "opacity-50"]);
-  return <ForwardIcon className={cn} />;
+
+  return <ForwardIcon className={cn} onClick={playerAction.next} />;
 };
 
 const Skeleton = () => (

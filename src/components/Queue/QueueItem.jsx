@@ -4,17 +4,23 @@ import {
   XMarkIcon,
   PlayIcon,
 } from "@heroicons/react/20/solid";
+import clsx from "clsx";
 import useSessionStore from "../../lib/stores/session-store";
 
-const QueueItem = ({ item }) => {
+const QueueItem = ({ item, current }) => {
   const queueUp = useSessionStore((s) => () => s.queueUp(item.id));
   const queueDown = useSessionStore((s) => () => s.queueDown(item.id));
   const queueRemove = useSessionStore((s) => () => s.queueRemove(item.id));
   const queuePlayNext = useSessionStore((s) => () => s.queuePlayNext(item.id));
   const buttonCN = `h-6 hover:bg-white/10 rounded p-1`;
 
+  const containerCN = clsx([
+    "flex w-full",
+    current?.id == item?.id && "bg-white/10",
+  ]);
+
   return (
-    <div className="flex w-full">
+    <div className={containerCN}>
       <div title={item.title} className="whitespace-nowrap overflow-clip mr-4">
         {item.title}
       </div>

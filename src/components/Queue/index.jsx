@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import useSessionStore from "../../lib/stores/session-store";
 import QueueItem from "./QueueItem";
 
 const Queue = () => {
-  const queue = useSessionStore((s) => s.session.queue);
+  const queue = useSessionStore((s) => s.queue);
+  const currentSong = useSessionStore((s) => s.currentSong);
 
   return (
     <div className="border w-full rounded p-4 pt-8 relative min-h-[10vh]">
@@ -11,9 +13,13 @@ const Queue = () => {
       </div>
 
       {queue?.length > 0 ? (
-        queue.map((item, idx) => <QueueItem key={idx} item={item} />)
+        queue.map((item, idx) => (
+          <QueueItem key={idx} item={item} current={currentSong} />
+        ))
       ) : (
-        <div className="text-sm italic text-dim text-center">No item in the queue, plz add 🎵</div>
+        <div className="text-sm italic text-dim text-center">
+          No item in the queue, plz add 🎵
+        </div>
       )}
     </div>
   );
