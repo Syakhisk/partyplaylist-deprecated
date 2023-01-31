@@ -8,8 +8,7 @@ import { handleQueueAdd } from "../lib/handler";
 import Loading from "../components/Loading";
 import { doc } from "firebase/firestore";
 import Queue from "../components/Queue";
-import { sessionAtom, useSessionStore } from "../lib/store";
-import { useAtom } from "jotai";
+import { useSessionStore } from "../lib/store";
 import { isEmptyObject } from "../lib/helper";
 import Player from "../components/Player";
 
