@@ -1,13 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import YouTube from "react-youtube";
 import usePlayerStore from "../lib/stores/player-store";
 import useSessionStore from "../lib/stores/session-store";
 
 const Player = () => {
+  const currentSong = useSessionStore((s) => s.currentSong);
+
   const setPlayer = usePlayerStore((s) => s.setPlayer);
   const update = usePlayerStore((s) => s.update);
   const handleStateChange = usePlayerStore((s) => s.handleStateChange);
-  const currentSong = useSessionStore((s) => s.currentSong);
+  // const [isMuted, setIsMuted] = useState(true);
+  // const isMuted = usePlayerStore((s) => s.isMuted);
+  // const isMuted = usePlayerStore.getState().isMuted;
+
+  // useEffect(() => {
+  //   const _isMuted = usePlayerStore.getState().isMuted;
+  //   setIsMuted(_isMuted);
+  // }, []);
 
   // Update player state every second
   useEffect(() => {
@@ -27,6 +36,7 @@ const Player = () => {
         opts={{
           playerVars: {
             // autoplay: 1,
+            // mute: isMuted ? 1 : 0,
             mute: 1,
             autoplay: 0,
             controls: 0,

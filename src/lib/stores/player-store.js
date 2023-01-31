@@ -54,22 +54,27 @@ const usePlayerStore = create((set, get) => ({
       });
     },
     toggleMute: () => {
-      const { player } = get();
-      const isMuted = player.isMuted();
+      const { player, isMuted } = get();
 
       if (isMuted) player.unMute();
       else player.mute();
 
-      set(() => ({ isMuted: !!isMuted }));
+      set(() => ({ isMuted: !isMuted }));
     },
   },
   handleStateChange: async (event) => {
     //TODO: handle when song finished
+    const { player } = get();
     const { queue, getCurrentSongIndex } = useSessionStore.getState();
 
     const data = {
       isPlaying: event.data == 1,
     };
+
+    // TODO: pause local player if firebase is paused, workaround before host
+    if (!data.isPlaying) {
+      player.pauseVideo();
+    }
 
     if (event.data == PLAY_STATE_MAP.ended) {
       let newIndex = getCurrentSongIndex() + 1;
@@ -96,8 +101,12 @@ const usePlayerStore = create((set, get) => ({
   setPlayer: (player) => {
     // TODO: workaround bcs player is still not ready
     // TODO: determine is host
+    const { isMuted } = get();
     setTimeout(() => {
       player.playVideo();
+
+      if (isMuted) player.mute();
+      else player.unMute();
     }, 1000);
     return set(() => ({ player }));
   },
