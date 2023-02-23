@@ -22,16 +22,33 @@ const usePlayerStore = create((set, get) => ({
   action: {
     // TODO: need to check if host
     play: () => {
-      get().player?.playVideo();
+      const { isHost } = useSessionStore.getState();
+      if (isHost) {
+        window.alert("play host");
+      } else {
+        window.alert("play client");
+      }
+
       updatePlayingStateOnFirestore("playing");
+
+      // get().player?.playVideo();
     },
     pause: () => {
-      get().player?.pauseVideo();
+      const { isHost } = useSessionStore.getState();
+      if (isHost) {
+        window.alert("pause host");
+      } else {
+        window.alert("pause client");
+      }
+
       updatePlayingStateOnFirestore("paused");
+
+      // get().player?.pauseVideo();
+      // updatePlayingStateOnFirestore("paused");
     },
     stop: () => {
-      get().player?.stopVideo();
-      updatePlayingStateOnFirestore("ended");
+      // get().player?.stopVideo();
+      // updatePlayingStateOnFirestore("ended");
     },
     next: () => {
       const { queue, getCurrentSongIndex } = useSessionStore.getState();
@@ -63,30 +80,31 @@ const usePlayerStore = create((set, get) => ({
     },
   },
   handleStateChange: async (event) => {
-    //TODO: handle when song finished
     const { player } = get();
-    const { queue, getCurrentSongIndex } = useSessionStore.getState();
+    const { queue, getCurrentSongIndex, isHost } = useSessionStore.getState();
+    // if (isHost && event.data == PLAY_STATE_MAP.playing) {
+    //   player.playVideo();
+    // }
 
-    const data = {
+    // const data = {
+    //   isPlaying: event.data == 1,
+    // };
+    // // TODO: pause local player if firebase is paused, workaround before host
+    // if (!data.isPlaying && player) {
+    //   player.pauseVideo();
+    // }
+    // if (event.data == PLAY_STATE_MAP.ended) {
+    //   let newIndex = getCurrentSongIndex() + 1;
+    //   if (newIndex >= queue.length) newIndex = 0;
+    //   updateFirestoreData({
+    //     current_song_status: "ended",
+    //     current_song_id: queue[newIndex]?.id ?? null,
+    //   });
+    // }
+
+    set(() => ({
       isPlaying: event.data == 1,
-    };
-
-    // TODO: pause local player if firebase is paused, workaround before host
-    if (!data.isPlaying) {
-      player.pauseVideo();
-    }
-
-    if (event.data == PLAY_STATE_MAP.ended) {
-      let newIndex = getCurrentSongIndex() + 1;
-      if (newIndex >= queue.length) newIndex = 0;
-
-      updateFirestoreData({
-        current_song_status: "ended",
-        current_song_id: queue[newIndex]?.id ?? null,
-      });
-    }
-
-    set(() => data);
+    }));
   },
   update: () => {
     set((state) => {
@@ -99,15 +117,16 @@ const usePlayerStore = create((set, get) => ({
     });
   },
   setPlayer: (player) => {
-    // TODO: workaround bcs player is still not ready
-    // TODO: determine is host
-    const { isMuted } = get();
-    setTimeout(() => {
-      player.playVideo();
-
-      if (isMuted) player.mute();
-      else player.unMute();
-    }, 1000);
+    // // TODO: workaround bcs player is still not ready
+    // // TODO: determine is host
+    // const { isMuted } = get();
+    // setTimeout(() => {
+    //   player.playVideo();
+    //   player.playVideo();
+    //   if (isMuted) player.mute();
+    //   else player.unMute();
+    // }, 1000);
+    // window.ply = player;
     return set(() => ({ player }));
   },
 }));

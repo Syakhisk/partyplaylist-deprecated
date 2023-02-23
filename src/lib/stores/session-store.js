@@ -7,6 +7,12 @@ const useSessionStore = create((set, get) => ({
   session: {},
   queue: [],
   currentSong: null,
+  isHost: false,
+  toggleHost: () => {
+    const { isHost } = get();
+    console.log({ isHost });
+    set(() => ({ isHost: !isHost }));
+  },
   setSession: (newSession) => {
     set(() => {
       const currentSong =

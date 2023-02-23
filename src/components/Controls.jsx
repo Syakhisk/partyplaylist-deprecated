@@ -1,10 +1,13 @@
 import {
   BackwardIcon,
+  FireIcon,
   ForwardIcon,
   PauseIcon,
   PlayIcon,
   SpeakerWaveIcon,
   SpeakerXMarkIcon,
+  UserIcon,
+  UserPlusIcon,
 } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import usePlayerStore from "../lib/stores/player-store";
@@ -28,7 +31,8 @@ const Controls = () => {
         <PrevButton />
         <PlayPauseButton />
         <NextButton />
-        <MuteButton />
+        {/* <MuteButton /> */}
+        <HostButton />
 
         <div
           className="w-full h-1 absolute bottom-0 left-0 bg-primary z-10"
@@ -41,6 +45,14 @@ const Controls = () => {
       </div>
     </div>
   );
+};
+
+const HostButton = () => {
+  const toggleHost = useSessionStore((s) => s.toggleHost);
+  const isHost = useSessionStore((s) => s.isHost);
+
+  const cn = clsx(["h-8", !isHost && "opacity-50"]);
+  return <FireIcon onClick={toggleHost} className={cn} />;
 };
 
 const PlayPauseButton = () => {
