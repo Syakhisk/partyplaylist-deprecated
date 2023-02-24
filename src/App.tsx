@@ -1,6 +1,7 @@
 // import { useEffect } from "react";
 // import useFirestore from "./stores";
 import { RouterProvider } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { router } from "./router";
 
 function App() {
@@ -18,6 +19,15 @@ function App() {
       {/*   <pre>{JSON.stringify(data, null, 2)}</pre> */}
       {/* </div> */}
       <RouterProvider router={router} />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        pauseOnHover
+        theme="dark"
+      />
     </>
   );
 }

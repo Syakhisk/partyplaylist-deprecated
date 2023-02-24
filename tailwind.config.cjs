@@ -9,6 +9,10 @@ module.exports = {
         backdrop: colors.gray["900"],
         muted: colors.gray["500"],
         primary: colors.red["500"],
+        gray: {
+          DEFAULT: colors.gray["400"],
+          ...colors.gray,
+        },
       },
       borderColor: {
         DEFAULT: colors.gray["600"],
