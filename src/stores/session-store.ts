@@ -30,9 +30,9 @@ export interface SessionStore {
   session?: {
     name: string;
     host: string;
-    current_song: {
+    current_video: {
       id: string;
-      song_status: YTPlaybackStatus;
+      status: YTPlaybackStatus;
     };
   };
   username?: string;
