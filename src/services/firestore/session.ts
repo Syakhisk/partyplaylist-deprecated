@@ -10,7 +10,7 @@ import { COLLECTION_NAME, db } from ".";
 // export const getSessionById = async (id: string): any => {
 // };
 
-export const getSessionById = async (id: string): any => {
+export const getSessionById = async (id: string): Promise<any> => {
   const docRef = doc(db, COLLECTION_NAME, id);
   const docSnap = await getDoc(docRef);
 
