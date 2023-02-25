@@ -1,17 +1,15 @@
 import React from "react";
 import clsx from "clsx";
-import { FieldErrors, FieldValues } from "react-hook-form";
+import { FieldErrors, FieldValues, useFormContext } from "react-hook-form";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 
 type Props = InputProps & React.InputHTMLAttributes<HTMLInputElement>;
 type InputProps = {
-  label: string;
+  label?: string;
   placeholder?: string;
   helperText?: string;
   id: string;
   required?: boolean;
-  register?: any;
-  formState?: any;
 };
 
 const Input = (props: Props) => {
@@ -22,12 +20,13 @@ const Input = (props: Props) => {
     id,
     type = "text",
     readOnly = false,
-    formState,
-    register,
     ...rest
   } = props;
 
-  const { errors } = formState;
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
 
   // get errors if 'id' contains '.'
   if (id.includes(".")) {
@@ -50,9 +49,11 @@ const Input = (props: Props) => {
 
   return (
     <div className={containerCN}>
-      <label htmlFor={id} className={labelCN}>
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={id} className={labelCN}>
+          {label}
+        </label>
+      )}
 
       <div className="relative">
         <input
@@ -79,7 +80,7 @@ const Input = (props: Props) => {
         <div className="mt-1">
           {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
           <p className="text-sm text-red-500">
-            {errors[id]?.message ?? "\u00A0"}
+            {errors[id]?.message?.toString() ?? "\u00A0"}
           </p>
         </div>
       )}

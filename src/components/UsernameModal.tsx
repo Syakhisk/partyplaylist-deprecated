@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Dialog } from "@headlessui/react";
 import { login } from "@/stores/session-store";
 import { usernameSchema } from "@/lib/schemas";
@@ -26,7 +26,7 @@ const UsernameModal = ({ isOpen, setIsOpen }: Props) => {
             <Input
               id="username"
               name="username"
-              label="Please enter your name"
+              label="Please enter your name to join the session"
             />
 
             <button className="bg-red-500 p-2 rounded-sm text-red-100 mt-4">

@@ -22,7 +22,7 @@ export const getSessionById = async (id: string): any => {
   };
 };
 
-export const subscribeToSession = (id: string, callback: Function): any => {
+export const subscribeToSession = (id: string, callback: any): any => {
   const docRef = doc(db, COLLECTION_NAME, id);
   return onSnapshot(docRef, (doc) => {
     callback({
