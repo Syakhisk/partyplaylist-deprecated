@@ -13,6 +13,7 @@ module.exports = {
           DEFAULT: colors.gray["400"],
           ...colors.gray,
         },
+        highlight: colors.gray["100"],
       },
       borderColor: {
         DEFAULT: colors.gray["600"],

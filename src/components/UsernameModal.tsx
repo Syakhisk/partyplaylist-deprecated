@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { Dialog } from "@headlessui/react";
-import useSessionStore from "@/stores/session-store";
+import { login } from "@/stores/session-store";
 import { usernameSchema } from "@/lib/schemas";
 import Form from "./Form";
 import Input from "./Input";
-import { FieldValues } from "react-hook-form";
+import { InferType } from "yup";
 
 type Props = {
   isOpen: boolean;
@@ -12,14 +12,9 @@ type Props = {
 };
 
 const UsernameModal = ({ isOpen, setIsOpen }: Props) => {
-  const username = useSessionStore((s) => s.username);
-
-  const handleSubmit = async (data: FieldValues) => {
-    console.log(data);
-    // if (!inputRef.current) return;
-
-    // const res = await usernameSchema.validate(inputRef.current.value);
-    // console.log({ res });
+  const handleSubmit = async (data: InferType<typeof usernameSchema>) => {
+    login(data.username);
+    setIsOpen(false);
   };
 
   return (

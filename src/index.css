@@ -4,7 +4,7 @@
 
 html {
   background: theme("colors.gray.900");
-  color: theme("colors.white");
+  color: theme("colors.gray.DEFAULT");
 }
 
 input {

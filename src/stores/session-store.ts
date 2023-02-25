@@ -1,12 +1,28 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-const useSessionStore = create<SessionStore>((set) => ({
-  session: undefined,
-  username: null,
-  login: (username: string) => set(() => ({ username })),
-  // getSessionById: (sessionId) => {},
-  // subscribeToSession: ()
-}));
+const useSessionStore = create(
+  persist<SessionStore>(
+    () => ({
+      session: undefined,
+      username: undefined,
+      isLogin: false,
+    }),
+    { name: "session-store" }
+  )
+);
+
+export const login = (username: string) =>
+  useSessionStore.setState({
+    username,
+    isLogin: true,
+  });
+
+export const logout = () =>
+  useSessionStore.setState({
+    username: undefined,
+    isLogin: false,
+  });
 
 export default useSessionStore;
 
@@ -19,8 +35,8 @@ export interface SessionStore {
       song_status: YTPlaybackStatus;
     };
   };
-  login: (username: string) => void;
-  username: string;
+  username?: string;
+  isLogin: boolean;
 }
 
 export enum YTPlaybackStatus {}

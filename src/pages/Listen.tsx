@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
-import useSessionStore from "@/stores/session-store";
+import useSessionStore, { logout } from "@/stores/session-store";
 import { useParams } from "react-router-dom";
-import { shallow } from "zustand/shallow";
 import UsernameModal from "@/components/UsernameModal";
 
 const Listen = () => {
   const { sessionId } = useParams();
-  const [username] = useSessionStore((s) => [s.username], shallow);
-  const [isOpen, setIsOpen] = useState(true);
 
-  useEffect(() => {}, [username]);
+  const username = useSessionStore((s) => s.username);
+  const isLogin = useSessionStore((s) => s.isLogin);
+  const [isOpen, setIsOpen] = useState(!isLogin);
+
+  useEffect(() => {
+    setIsOpen(!isLogin);
+  }, [isLogin]);
 
   return (
     <div>
       <UsernameModal isOpen={isOpen} setIsOpen={setIsOpen} />
       <div>{sessionId}</div>
-      <button onClick={() => setIsOpen(!isOpen)}>Button</button>
+      <div>{username}</div>
+      <button onClick={logout}>Log Out</button>
     </div>
   );
 };
