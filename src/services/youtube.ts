@@ -19,9 +19,18 @@ export const getMetadataFromUrl = async (
     video_url: "https://www.youtube.com/watch?v=cQGfLDnmWS8",
   };
 
-  const baseUrl = "https://www.youtube.com/oembed";
-
   try {
+    const parsedUrl = new URL(url);
+    // if (!["youtube.com", "youte.be"].includes(parsedUrl.hostname))
+    //   throw new Error("Only youtube.com or youtu.be are valid url");
+    let id: string | null = null;
+
+    if (parsedUrl.hostname.includes("youtu.be")) id = parsedUrl.pathname;
+    else id = new URLSearchParams(parsedUrl.searchParams).get("v");
+
+    if (!id) throw new Error("No video id found");
+
+    const baseUrl = "https://www.youtube.com/oembed";
     const res = await axios?.get(baseUrl, { params: { url } });
     if (!res?.data) throw new Error("No data found in response");
 
@@ -29,11 +38,15 @@ export const getMetadataFromUrl = async (
     return {
       channel_name: data.author_name,
       thumbnail_url: data.thumbnail_url,
-      video_id: new URLSearchParams(new URL(url).searchParams).get("v"),
+      video_id: id,
       video_title: data.title,
       video_url: url,
     };
   } catch (e) {
     console.log("--ERROR--", e);
   }
+};
+
+export const isValidYoutubeUrl = (url: string) => {
+  return url.match(/^https:\/\/(www\.)?(music\.)?youtu(.)?be(\.com)?\/.*$/);
 };

@@ -21,7 +21,7 @@ const Controls = ({ video }: Props) => {
 
   return (
     <div className="flex max-md:flex-col border w-full p-4 gap-4 bg-backdrop z-10">
-      <div className="max-md:w-full h-[250px] w-[250px] aspect-square border rounded-xl overflow-hidden flex-shrink-0 mx-auto">
+      <div className="max-md:hidden h-[250px] w-[250px] aspect-square border rounded-xl overflow-hidden flex-shrink-0 mx-auto">
         <img src={video.thumbnail_url} className="h-full w-full object-cover" />
       </div>
 
@@ -29,7 +29,7 @@ const Controls = ({ video }: Props) => {
         <div className="text-white">{video.video_title}</div>
         <div className="text-sm">{video.channel_name}</div>
 
-        <div className="w-full h-1 relative bg-muted mt-auto">
+        <div className="w-full h-1 relative bg-muted mt-4">
           <div
             className="w-full h-1 absolute bottom-0 left-0 bg-primary z-10"
             style={{

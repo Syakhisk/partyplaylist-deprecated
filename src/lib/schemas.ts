@@ -21,3 +21,9 @@ export const joinSessionSchema = yup
     sessionId: yup.string().matches(/^[0-9]+$/, "only numbers are allowed"),
   })
   .required();
+
+export const urlOrTitleSchema = yup
+  .object({
+    query: yup.string().required(),
+  })
+  .required();

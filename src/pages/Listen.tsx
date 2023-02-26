@@ -18,7 +18,7 @@ const Listen = () => {
   useEffect(() => {
     (async () => {
       const data = await getMetadataFromUrl(
-        "https://www.youtube.com/watch?v=cQGfLDnmWS8"
+        "https://www.youtube.com/watch?v=KXw8CRapg7k"
       );
 
       setVideo(data);

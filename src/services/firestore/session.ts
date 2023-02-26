@@ -1,10 +1,4 @@
-import {
-  doc,
-  DocumentData,
-  DocumentSnapshot,
-  getDoc,
-  onSnapshot,
-} from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { COLLECTION_NAME, db } from ".";
 
 // export const getSessionById = async (id: string): any => {
