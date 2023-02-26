@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDX2YZ_NolrWUaagYRaPaEkg1YYS0BngJQ",
@@ -16,3 +16,10 @@ export const COLLECTION_NAME = "partyplaylist-sessions";
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+
+export const getSnapshot = async (docId: string): Promise<any> => {
+  const docRef = doc(db, COLLECTION_NAME, docId);
+  const docSnap = await getDoc(docRef);
+  if (!docSnap.exists()) return null;
+  return docSnap.data();
+};

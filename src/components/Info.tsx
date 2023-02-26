@@ -4,12 +4,12 @@ import useSessionStore, { logout } from "@/stores/session-store";
 
 const Info = () => {
   const username = useSessionStore((s) => s.username);
-  const { sessionId } = useParams();
+  const session = useSessionStore((s) => s.session);
   return (
     <div className="flex border justify-between px-4 py-1">
       <div className="flex md:flex-col max-md:items-center max-md:gap-2">
         <div className="text-xs leading-none">Session Code</div>
-        <div className="font-mono max-md:leading-none">#{sessionId}</div>
+        <div className="font-mono max-md:leading-none">#{session.id}</div>
       </div>
 
       <button

@@ -34,9 +34,9 @@ export const logout = () =>
 //   useSessionStore.setState({ session: { ...session } });
 // };
 
-export const setSession = (session: Partial<ISession>) => {
+export const setSession = (session: ISession | Partial<ISession>) => {
   useSessionStore.setState({
-    session,
+    session: session as ISession,
   });
 };
 

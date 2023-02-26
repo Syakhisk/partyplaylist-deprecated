@@ -1,9 +1,11 @@
+import useQueueStore from "@/stores/queue-store";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import AddVideoModal from "./AddVideoModal";
 
 const Queue = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const queue = useQueueStore((s) => s.queue);
 
   return (
     <>
@@ -24,9 +26,15 @@ const Queue = () => {
           </div>
 
           <div className="h-[200vh]">
-            <div className="text-sm italic text-muted text-center">
-              No item in the queue, plz add 🎵
-            </div>
+            {queue.length > 0 ? (
+              queue.map((video) => (
+                <div key={video.uid ?? video.video_id}>{video.video_title}</div>
+              ))
+            ) : (
+              <div className="text-sm italic text-muted text-center">
+                No item in the queue, plz add 🎵
+              </div>
+            )}
           </div>
         </div>
       </div>

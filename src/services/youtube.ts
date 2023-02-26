@@ -6,18 +6,20 @@ export interface VideoMetadata {
   video_id: string | null;
   video_title: string;
   video_url: string;
+  uid?: number;
 }
 
 export const getMetadataFromUrl = async (
   url: string
 ): Promise<VideoMetadata | undefined> => {
-  return {
-    channel_name: "Soegi Bornean",
-    thumbnail_url: "https://i.ytimg.com/vi/cQGfLDnmWS8/hqdefault.jpg",
-    video_id: "cQGfLDnmWS8",
-    video_title: "Soegi Bornean - Asmalibrasi (Official Music Video)",
-    video_url: "https://www.youtube.com/watch?v=cQGfLDnmWS8",
-  };
+  // return {
+  //   channel_name: "Soegi Bornean",
+  //   thumbnail_url: "https://i.ytimg.com/vi/cQGfLDnmWS8/hqdefault.jpg",
+  //   video_id: "cQGfLDnmWS8",
+  //   video_title: "Soegi Bornean - Asmalibrasi (Official Music Video)",
+  //   video_url: "https://www.youtube.com/watch?v=cQGfLDnmWS8",
+  //   uid: Date.now(),
+  // };
 
   try {
     const parsedUrl = new URL(url);
@@ -50,3 +52,8 @@ export const getMetadataFromUrl = async (
 export const isValidYoutubeUrl = (url: string) => {
   return url.match(/^https:\/\/(www\.)?(music\.)?youtu(.)?be(\.com)?\/.*$/);
 };
+
+export const appendUniqueId = (video: VideoMetadata) => ({
+  ...video,
+  uid: Date.now(),
+});
