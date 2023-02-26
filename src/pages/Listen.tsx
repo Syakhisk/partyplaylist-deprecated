@@ -3,11 +3,12 @@ import Info from "@/components/Info";
 import Queue from "@/components/Queue";
 import UsernameModal from "@/components/UsernameModal";
 import { getMetadataFromUrl, VideoMetadata } from "@/services/youtube";
-import useSessionStore from "@/stores/session-store";
+import useSessionStore, { setSession } from "@/stores/session-store";
 import { useEffect, useState } from "react";
 
 const Listen = () => {
   const isLogin = useSessionStore((s) => s.isLogin);
+  const username = useSessionStore((s) => s.username);
   const [isOpen, setIsOpen] = useState(!isLogin);
   const [video, setVideo] = useState<VideoMetadata>();
 
@@ -20,6 +21,10 @@ const Listen = () => {
       const data = await getMetadataFromUrl(
         "https://www.youtube.com/watch?v=KXw8CRapg7k"
       );
+
+      setSession({
+        host: username,
+      });
 
       setVideo(data);
     })();

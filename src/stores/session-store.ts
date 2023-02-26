@@ -1,14 +1,20 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-const useSessionStore = create(
-  persist<SessionStore>(
-    () => ({
-      session: undefined,
-      username: undefined,
+const useSessionStore = create<SessionStore>()(
+  persist(
+    (_set) => ({
+      session: {
+        id: null,
+        current_video: null,
+        host: null,
+      },
+      username: null,
       isLogin: false,
     }),
-    { name: "session-store" }
+    {
+      name: "session-store",
+    }
   )
 );
 
@@ -20,29 +26,42 @@ export const login = (username: string) =>
 
 export const logout = () =>
   useSessionStore.setState({
-    username: undefined,
+    username: null,
     isLogin: false,
   });
 
+// export const setSession = (session: ISession) => {
+//   useSessionStore.setState({ session: { ...session } });
+// };
+
+export const setSession = (session: Partial<ISession>) => {
+  useSessionStore.setState({
+    session,
+  });
+};
+
 export default useSessionStore;
 
+export interface ISession {
+  id: string | null;
+  host: string | null;
+  current_video: {
+    id: string;
+    status: string;
+  } | null;
+}
+
 export interface SessionStore {
-  session?: {
-    name: string;
-    host: string;
-    current_video: {
-      id: string;
-      status: YTPlaybackStatus;
-    };
-  };
-  username?: string;
+  session: ISession;
+  username: string | null;
   isLogin: boolean;
 }
 
-export enum YTPlaybackStatus {}
-// Unstarted = -1,
-// Ended,
-// Playing,
-// Paused,
-// Buffering,
-// VideoCued = 5,
+export enum YTPlaybackStatus {
+  Unstarted = -1,
+  Ended,
+  Playing,
+  Paused,
+  Buffering,
+  VideoCued = 5,
+}

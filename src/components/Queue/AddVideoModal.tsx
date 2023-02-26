@@ -6,6 +6,8 @@ import Input from "@/components/Input";
 import { InferType } from "yup";
 import { getMetadataFromUrl, isValidYoutubeUrl } from "@/services/youtube";
 import { UseFormReturn } from "react-hook-form";
+import { addToQueue } from "@/services/firestore/queue";
+import useSessionStore from "@/stores/session-store";
 
 type Props = {
   isOpen: boolean;
@@ -13,6 +15,8 @@ type Props = {
 };
 
 const AddVideoModal = ({ isOpen, setIsOpen }: Props) => {
+  const session = useSessionStore((s) => s.session);
+
   const handleSubmit = async (
     data: InferType<typeof urlOrTitleSchema>,
     methods: UseFormReturn
@@ -29,7 +33,12 @@ const AddVideoModal = ({ isOpen, setIsOpen }: Props) => {
       return;
     }
 
-    const meta = await getMetadataFromUrl(data.query);
+    const video = await getMetadataFromUrl(data.query);
+
+    if (session?.id && video) {
+      addToQueue(session.id, video);
+    }
+
     setIsOpen(false);
   };
 
