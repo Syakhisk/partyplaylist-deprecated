@@ -23,7 +23,7 @@ const UsernameModal = ({ isOpen, setIsOpen }: Props) => {
       toast.error("already have an id, please input another name")
       return
     }
-    createSession(hashNumber.toString(), data.username)
+    await createSession(hashNumber.toString(), data.username)
     setSession({
       id: hashNumber.toString()
     }) 
