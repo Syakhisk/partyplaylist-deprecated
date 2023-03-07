@@ -1,4 +1,5 @@
 import { VideoMetadata } from "@/services/youtube";
+import useQueueStore from "@/stores/queue-store";
 import useSessionStore from "@/stores/session-store";
 import {
   BackwardIcon,
@@ -11,11 +12,12 @@ import { useEffect } from "react";
 
 const Controls = () => {
   const session = useSessionStore((s) => s.session);
-  const video = false;
 
-  useEffect(() => {
+  //TODO: only to make build success
+  const queue = useQueueStore((s) => s.queue);
+  const video = queue[0] ?? {};
 
-  }, []);
+  useEffect(() => {}, []);
 
   if (!video)
     return (
