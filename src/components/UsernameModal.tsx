@@ -1,10 +1,14 @@
 import { Dispatch, SetStateAction } from "react";
 import { Dialog } from "@headlessui/react";
-import { login } from "@/stores/session-store";
+import { login, setSession } from "@/stores/session-store";
 import { usernameSchema } from "@/lib/schemas";
 import Form from "./Form";
 import Input from "./Input";
 import { InferType } from "yup";
+import { getHash } from "@/lib/hash";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { createSession } from "@/services/firestore/session";
 
 type Props = {
   isOpen: boolean;
@@ -12,9 +16,20 @@ type Props = {
 };
 
 const UsernameModal = ({ isOpen, setIsOpen }: Props) => {
+  const navigate = useNavigate()
   const handleSubmit = async (data: InferType<typeof usernameSchema>) => {
+    const hashNumber = await getHash(data.username)
+    if (hashNumber === -1) {
+      toast.error("already have an id, please input another name")
+      return
+    }
+    createSession(hashNumber.toString(), data.username)
+    setSession({
+      id: hashNumber.toString()
+    }) 
     login(data.username);
     setIsOpen(false);
+    navigate(`/listen/${hashNumber}`)
   };
 
   return (
