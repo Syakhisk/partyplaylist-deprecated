@@ -7,7 +7,7 @@ export async function getHash(val:string): Promise<number> {
     hash = ((hash << 5) - hash) + val.charCodeAt(i)
     hash |=0
   }
-
+  hash = Math.abs(hash)
   const session = await getDoc(doc(db, COLLECTION_NAME, hash.toString()))
   if (session.exists()) return -1
   return hash
