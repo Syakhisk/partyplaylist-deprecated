@@ -1,4 +1,5 @@
 import { VideoMetadata } from "@/services/youtube";
+import useSessionStore from "@/stores/session-store";
 import {
   BackwardIcon,
   ForwardIcon,
@@ -6,12 +7,16 @@ import {
   PlayIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
+import { useEffect } from "react";
 
-type Props = {
-  video?: VideoMetadata;
-};
+const Controls = () => {
+  const session = useSessionStore((s) => s.session);
+  const video = false;
 
-const Controls = ({ video }: Props) => {
+  useEffect(() => {
+
+  }, []);
+
   if (!video)
     return (
       <div className="flex max-md:flex-col border w-full p-4 gap-4 h-[250px]">

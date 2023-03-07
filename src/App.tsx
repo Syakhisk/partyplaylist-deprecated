@@ -5,13 +5,13 @@ import { ToastContainer } from "react-toastify";
 import { router } from "./router";
 
 function App() {
-  // const subscribe = useFirestore((s) => s.subscribe);
+  const subscribe = useFirestore((s) => s.subscribe);
   // const data = useFirestore((s) => s.data);
 
-  // useEffect(() => {
-  //   const unsubscribe = subscribe();
-  //   return unsubscribe;
-  // }, [subscribe]);
+  useEffect(() => {
+    const unsubscribe = subscribe();
+    return unsubscribe;
+  }, [subscribe]);
 
   return (
     <>

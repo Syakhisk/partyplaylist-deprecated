@@ -20,6 +20,7 @@ export const db = getFirestore(app);
 export const getSnapshot = async (docId: string): Promise<any> => {
   const docRef = doc(db, COLLECTION_NAME, docId);
   const docSnap = await getDoc(docRef);
+
   if (!docSnap.exists()) return null;
   return docSnap.data();
 };
