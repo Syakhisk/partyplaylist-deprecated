@@ -1,14 +1,13 @@
 import { COLLECTION_NAME, db } from "@/services/firestore"
 import { doc, getDoc } from "firebase/firestore"
-
-export async function getHash(val:string): Promise<number> {
-  let hash =0
-  for (let i=0; i<val.length; i++) {
-    hash = ((hash << 5) - hash) + val.charCodeAt(i)
-    hash |=0
-  }
-  hash = Math.abs(hash)
-  const session = await getDoc(doc(db, COLLECTION_NAME, hash.toString()))
-  if (session.exists()) return -1
-  return hash
+import { customAlphabet } from "nanoid"
+const customValue = "1234567890qwertyuiopasdfghjklzxcvbnm"
+const nanoId = customAlphabet(customValue, 6)
+export async function getHash(): Promise<string> {
+  let id = ""
+  for (let exist = true; exist; ) {
+    id = nanoId()
+    exist  = (await getDoc(doc(db, COLLECTION_NAME, id))).exists()
+  } 
+  return id
 }

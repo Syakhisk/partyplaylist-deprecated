@@ -6,7 +6,6 @@ import Form from "./Form";
 import Input from "./Input";
 import { InferType } from "yup";
 import { getHash } from "@/lib/hash";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { createSession } from "@/services/firestore/session";
 
@@ -18,18 +17,14 @@ type Props = {
 const UsernameModal = ({ isOpen, setIsOpen }: Props) => {
   const navigate = useNavigate()
   const handleSubmit = async (data: InferType<typeof usernameSchema>) => {
-    const hashNumber = await getHash(data.username)
-    if (hashNumber === -1) {
-      toast.error("already have an id, please input another name")
-      return
-    }
-    await createSession(hashNumber.toString(), data.username)
+    const sessionId = await getHash()
+    await createSession(sessionId, data.username)
     setSession({
-      id: hashNumber.toString()
+      id: sessionId
     }) 
     login(data.username);
     setIsOpen(false);
-    navigate(`/listen/${hashNumber}`)
+    navigate(`/listen/${sessionId}`)
   };
 
   return (
