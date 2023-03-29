@@ -1,2 +1,2 @@
+branchName: '${%BRANCH_NAME}'
 silent: false
-branchName: '${issue.number}-${issue.title,}'
