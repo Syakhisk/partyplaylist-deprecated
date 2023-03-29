@@ -1,2 +1,2 @@
 silent: false
-branchName: 'TEST-${issue.number}-${issue.title,}'
+branchName: '${issue.number}-${issue.title,}'
