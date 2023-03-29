@@ -1,5 +1,4 @@
-import { updateSongId } from "@/services/firestore/player";
-import { VideoMetadata } from "@/services/youtube";
+
 import {
   YTPlaybackStatus,
   pause,
@@ -7,7 +6,6 @@ import {
   usePlayerStore,
 } from "@/stores/player-store";
 import useQueueStore from "@/stores/queue-store";
-import useSessionStore from "@/stores/session-store";
 import {
   BackwardIcon,
   ForwardIcon,
@@ -15,7 +13,6 @@ import {
   PlayIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { useEffect } from "react";
 
 const Controls = () => {
   //TODO: only to make build success

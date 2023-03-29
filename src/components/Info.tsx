@@ -1,5 +1,4 @@
 import { UserIcon } from "@heroicons/react/24/solid";
-import { useParams } from "react-router-dom";
 import useSessionStore, { logout } from "@/stores/session-store";
 
 const Info = () => {

@@ -1,5 +1,5 @@
 import { VideoMetadata } from "@/services/youtube";
-import useQueueStore, { queueDown, queueUp, removeQueue } from "@/stores/queue-store";
+import { queueDown, queueUp, removeQueue } from "@/stores/queue-store";
 import {
   ChevronDownIcon,
   ChevronUpIcon,
@@ -24,7 +24,11 @@ const QueueItem = ({ video }: Props) => {
           <ChevronDownIcon role="button" className="stroke-[3px] h-4" />
         </button>
 
-        <button className="" onClick={() => removeQueue(video.uid)}>
+        <button
+          className=""
+          onClick={() => removeQueue(video.uid)}
+          title="Remove video"
+        >
           <XMarkIcon role="button" className="stroke-[3px] h-4" />
         </button>
       </div>

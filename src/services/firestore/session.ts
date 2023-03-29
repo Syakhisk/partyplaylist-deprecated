@@ -1,5 +1,7 @@
 import { Unsubscribe, arrayUnion, doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { COLLECTION_NAME, db } from ".";
+import { VideoMetadata } from "@/services/youtube";
+import { ISession } from "@/stores/session-store";
 
 // export const getSessionById = async (id: string): any => {
 // };
@@ -37,14 +39,19 @@ export const addParticipant = async(id: string, name:string): Promise<void> => {
   })
 }
 
-export const subscribeToSession = (id: string, callback: (data : {[key:string]:unknown}) => void): Unsubscribe=> {
+interface SessionData extends ISession {
+    name: string | null,
+    participants: {
+      name: string | null
+    }[]
+    queue : VideoMetadata[]
+} 
+export const subscribeToSession = (id: string, callback: (data : SessionData) => void): Unsubscribe=> {
   const docRef = doc(db, COLLECTION_NAME, id);
   return onSnapshot(docRef, (doc) => {
     callback({
-      data: {
         id: doc.id,
-        ...doc.data(),
-      },
+        ...doc.data() as Omit<SessionData, "id">,
     });
   });
 };

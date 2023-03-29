@@ -14,15 +14,11 @@ const Player = () => {
   const player = usePlayerStore((s) => s.player);
   const playerStatus = usePlayerStore((s) => s.playingStatus);
   const currentSong = useSessionStore((s) => s.session.current_song);
-  const isMuted = usePlayerStore((s) => s.isMuted);
   const handleStateChange = (event: YouTubeEvent<number>): void => {
-    console.log({event})
     if (event.data === YTPlaybackStatus.Ended) {
-      setPlayingStatus(YTPlaybackStatus.Unstarted)
-      
+      setPlayingStatus(YTPlaybackStatus.Unstarted);
     }
-  }
-  
+  };
 
   const update = () => {
     // console.log(playerStatus)
@@ -68,40 +64,41 @@ const Player = () => {
 
   return (
     <div className="w-96 border /opacity-0 /absolute">
-      <YouTube
-        // videoId={"2g811Eo7K8U"}
-        videoId={currentSong?.id}
-        className={"youtubeContainer"}
-        opts={{
-          playerVars: {
-            // autoplay: 1,
-            // mute: isMuted ? 1 : 0,
-            // mute: isMuted ? 1 : 0,
-            autoplay: 0,
-            controls: 0,
-            modestbranding: 1,
-            enablejsapi: 1,
-            origin: window.location.origin,
-          },
-        }}
-        onReady={(event) => setPlayer(event.target)}
-        onStateChange={handleStateChange}
-        // id={string} // defaults -> ''
-        // className={string} // defaults -> ''
-        // iframeClassName={string} // defaults -> ''
-        // style={object} // defaults -> {}
-        // title={string} // defaults -> ''
-        // loading={string} // defaults -> undefined
-        // opts={obj} // defaults -> {}
-        // onReady={func} // defaults -> noop
-        // onPlay={func} // defaults -> noop
-        // onPause={func} // defaults -> noop
-        // onEnd={func} // defaults -> noop
-        // onError={func} // defaults -> noop
-        // onStateChange={func} // defaults -> noop
-        // onPlaybackRateChange={func} // defaults -> noop
-        // onPlaybackQualityChange={func} // defaults -> noop
-      />
+      {typeof currentSong?.id === "string" ? (
+        <YouTube
+          videoId={currentSong.id}
+          className={"youtubeContainer"}
+          opts={{
+            playerVars: {
+              // autoplay: 1,
+              // mute: isMuted ? 1 : 0,
+              // mute: isMuted ? 1 : 0,
+              autoplay: 0,
+              controls: 0,
+              modestbranding: 1,
+              enablejsapi: 1,
+              origin: window.location.origin,
+            },
+          }}
+          onReady={(event) => setPlayer(event.target)}
+          onStateChange={handleStateChange}
+          // id={string} // defaults -> ''
+          // className={string} // defaults -> ''
+          // iframeClassName={string} // defaults -> ''
+          // style={object} // defaults -> {}
+          // title={string} // defaults -> ''
+          // loading={string} // defaults -> undefined
+          // opts={obj} // defaults -> {}
+          // onReady={func} // defaults -> noop
+          // onPlay={func} // defaults -> noop
+          // onPause={func} // defaults -> noop
+          // onEnd={func} // defaults -> noop
+          // onError={func} // defaults -> noop
+          // onStateChange={func} // defaults -> noop
+          // onPlaybackRateChange={func} // defaults -> noop
+          // onPlaybackQualityChange={func} // defaults -> noop
+        />
+      ) : <p>Currently no song in the queue</p>}
     </div>
   );
 };
