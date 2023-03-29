@@ -5,6 +5,7 @@ import Queue from "@/components/Queue";
 import UsernameModal from "@/components/UsernameModal";
 import { getSnapshot } from "@/services/firestore";
 import { updateSongId } from "@/services/firestore/player";
+import { updateQueue } from "@/services/firestore/queue";
 import { subscribeToSession } from "@/services/firestore/session";
 import { getMetadataFromUrl, VideoMetadata } from "@/services/youtube";
 import {
@@ -47,19 +48,19 @@ const Listen = () => {
 
   useEffect(() => {
     if (!sessionId) return;
-    return subscribeToSession(sessionId, ({ data }) => {
+    return subscribeToSession(sessionId, async ({ data }) => {
       setCurrentSong(
         (data as { current_song: { id: string } }).current_song.id
       );
-      if (sessionId && video.video_id) {
-        updateSongId(sessionId, video.video_id);
+      if (sessionId) { 
+        setQueue((data as {queue: VideoMetadata[]}).queue)
       }
       setPlayingStatus(
         (data as { current_song: { status: number } }).current_song
           .status as YTPlaybackStatus
       );
     });
-  }, [sessionId, video.video_id]);
+  }, [sessionId, queue]);
 
   useEffect(() => {
     setLoadingEnum("loading");
@@ -99,7 +100,7 @@ const Listen = () => {
       {loadingEnum === "ready" && (
         <>
           <Info />
-          { isHost && <Player />}
+          {isHost && <Player />}
           <Controls />
           <Queue />
         </>

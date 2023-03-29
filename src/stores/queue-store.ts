@@ -3,6 +3,7 @@ import { VideoMetadata } from "@/services/youtube";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import useSessionStore from "./session-store";
+import { updateSongId } from "@/services/firestore/player";
 
 const useQueueStore = create<QueueStore>()(
   persist(
@@ -23,7 +24,7 @@ export const setQueue = (queue: VideoMetadata[]) => {
 
 export const queueUp = async (uid?: number) => {
   if (!uid) return;
-
+  
   const { queue } = useQueueStore.getState();
   const { session } = useSessionStore.getState();
 
@@ -39,7 +40,11 @@ export const queueUp = async (uid?: number) => {
   _queue[videoIdx] = temp;
 
   useQueueStore.setState({ queue: _queue });
-  updateQueue(session.id, _queue);
+  await updateQueue(session.id, _queue);
+
+  if (_queue[0].video_id) {
+    await updateSongId(session.id, _queue[0].video_id)
+  }
 };
 
 export const queueDown = async (uid?: number) => {
@@ -59,7 +64,11 @@ export const queueDown = async (uid?: number) => {
   _queue[videoIdx] = temp;
 
   useQueueStore.setState({ queue: _queue });
-  updateQueue(session.id, _queue);
+  await updateQueue(session.id, _queue);
+
+  if (_queue[0].video_id) {
+    await updateSongId(session.id, _queue[0].video_id)
+  }
 };
 
 export interface QueueStore {
