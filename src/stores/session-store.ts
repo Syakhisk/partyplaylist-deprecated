@@ -6,7 +6,10 @@ const useSessionStore = create<SessionStore>()(
     (_set) => ({
       session: {
         id: null,
-        current_song: null,
+        current_song: {
+          id: null,
+          status: null,
+        },
         host: null,
       },
       username: null,
@@ -34,7 +37,7 @@ export const logout = () =>
 //   useSessionStore.setState({ session: { ...session } });
 // };
 
-export const setCurrentSong = (currSong: string) => {
+export const setCurrentSong = (currSong: string | null) => {
   const session = useSessionStore.getState().session
   useSessionStore.setState({session: {...session, current_song:{...session.current_song, id: currSong}}})
 };
@@ -56,9 +59,9 @@ export interface ISession {
   id: string | null;
   host: string | null;
   current_song: {
-    id?: string;
-    status?: string;
-  } | null;
+    id: string | null;
+    status: number | null;
+  };
 }
 
 export interface SessionStore {

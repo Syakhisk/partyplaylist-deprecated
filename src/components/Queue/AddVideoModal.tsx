@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Dialog } from "@headlessui/react";
 import { urlOrTitleSchema } from "@/lib/schemas";
 import Form from "@/components/Form";
@@ -10,8 +10,7 @@ import {
   isValidYoutubeUrl,
 } from "@/services/youtube";
 import { UseFormReturn } from "react-hook-form";
-import { addToQueue } from "@/services/firestore/queue";
-import useSessionStore from "@/stores/session-store";
+import { addQueue } from "@/stores/queue-store";
 
 type Props = {
   isOpen: boolean;
@@ -19,8 +18,6 @@ type Props = {
 };
 
 const AddVideoModal = ({ isOpen, setIsOpen }: Props) => {
-  const session = useSessionStore((s) => s.session);
-
   const handleSubmit = async (
     data: InferType<typeof urlOrTitleSchema>,
     methods: UseFormReturn
@@ -39,9 +36,9 @@ const AddVideoModal = ({ isOpen, setIsOpen }: Props) => {
 
     const video = await getMetadataFromUrl(data.query);
 
-    if (session?.id && video) {
+    if (video) {
       const appendedVideo = appendUniqueId(video);
-      addToQueue(session.id, appendedVideo);
+      await addQueue(appendedVideo);
     }
 
     setIsOpen(false);

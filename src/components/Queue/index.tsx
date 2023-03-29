@@ -27,7 +27,7 @@ const Queue = () => {
           </div>
 
           <div className="h-[200vh] pt-3">
-            {queue.length > 0 ? (
+            {queue?.length > 0 ? (
               queue.map((video) => <QueueItem key={video.uid} video={video} />)
             ) : (
               <div className="text-sm italic text-muted text-center">
