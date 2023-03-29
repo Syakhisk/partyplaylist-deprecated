@@ -24,7 +24,7 @@ export const setQueue = (queue: VideoMetadata[]) => {
 
 export const queueUp = async (uid?: number) => {
   if (!uid) return;
-  
+
   const { queue } = useQueueStore.getState();
   const { session } = useSessionStore.getState();
 
@@ -42,9 +42,26 @@ export const queueUp = async (uid?: number) => {
   useQueueStore.setState({ queue: _queue });
   await updateQueue(session.id, _queue);
 
-  if (_queue[0].video_id) {
-    await updateSongId(session.id, _queue[0].video_id)
+  if (videoIdx === 1 && _queue[0].video_id) {
+    await updateSongId(session.id, _queue[0].video_id);
   }
+};
+
+export const removeQueue = async (uid?: number) => {
+  if (!uid) return;
+  const { queue } = useQueueStore.getState();
+  const { session } = useSessionStore.getState();
+  if (!session.id) return;
+
+  const videoIdx = queue.findIndex((_video) => _video.uid === uid);
+  if (videoIdx === -1) return;
+  const _queue = [...queue];
+  _queue.splice(videoIdx, 1);
+  if (videoIdx === 0) {
+      await updateSongId(session.id, _queue.at(0)?.video_id ?? "");
+  }
+  useQueueStore.setState({ queue: _queue });
+  await updateQueue(session.id, _queue);
 };
 
 export const queueDown = async (uid?: number) => {
@@ -66,8 +83,8 @@ export const queueDown = async (uid?: number) => {
   useQueueStore.setState({ queue: _queue });
   await updateQueue(session.id, _queue);
 
-  if (_queue[0].video_id) {
-    await updateSongId(session.id, _queue[0].video_id)
+  if (videoIdx === 0 && _queue[0].video_id) {
+    await updateSongId(session.id, _queue[0].video_id);
   }
 };
 
