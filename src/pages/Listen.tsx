@@ -4,13 +4,10 @@ import Player from "@/components/Player";
 import Queue from "@/components/Queue";
 import UsernameModal from "@/components/UsernameModal";
 import { getSnapshot } from "@/services/firestore";
-import { updateSongId } from "@/services/firestore/player";
-import { updateQueue } from "@/services/firestore/queue";
 import { subscribeToSession } from "@/services/firestore/session";
 import { getMetadataFromUrl, VideoMetadata } from "@/services/youtube";
 import {
   setPlayingStatus,
-  usePlayerStore,
   YTPlaybackStatus,
 } from "@/stores/player-store";
 import useQueueStore, { setQueue } from "@/stores/queue-store";
@@ -25,11 +22,9 @@ const Listen = () => {
   const navigate = useNavigate();
   const { sessionId } = useParams();
   const isLogin = useSessionStore((s) => s.isLogin);
-  const username = useSessionStore((s) => s.username);
   const [isOpen, setIsOpen] = useState(!isLogin);
   const [, setVideo] = useState<VideoMetadata>();
   const queue = useQueueStore((s) => s.queue);
-  const video = queue[0] ?? {};
   const isHost =
     useSessionStore.getState().username ===
     useSessionStore.getState().session.host;
@@ -79,9 +74,6 @@ const Listen = () => {
         return;
       }
 
-      const data = await getMetadataFromUrl(
-        "https://www.youtube.com/watch?v=KXw8CRapg7k"
-      );
 
       setSession({
         host: snapshot.host,
@@ -89,11 +81,9 @@ const Listen = () => {
       });
 
       setQueue(snapshot.queue as VideoMetadata[]);
-
-      setVideo(data);
       setLoadingEnum("ready");
     })();
-  }, []);
+  }, [window.location.pathname]);
 
   return (
     <div className="max-w-4xl border mx-auto h-screen overflow-hidden flex flex-col">

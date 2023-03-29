@@ -24,7 +24,7 @@ const QueueItem = ({ video }: Props) => {
           <ChevronDownIcon role="button" className="stroke-[3px] h-4" />
         </button>
 
-        <button className="" onClick={() => removeQueue(video.uid)}>
+        <button className="" onClick={() => removeQueue(video.uid)} title="Remove video">
           <XMarkIcon role="button" className="stroke-[3px] h-4" />
         </button>
       </div>
