@@ -1,3 +1,4 @@
+import { SessionData } from "@/services/firestore/session";
 import { initializeApp } from "firebase/app";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 
@@ -17,10 +18,10 @@ export const COLLECTION_NAME = "partyplaylist-sessions";
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-export const getSnapshot = async (docId: string): Promise<any> => {
+export const getSnapshot = async (docId: string): Promise<Omit<SessionData, "id"> | null> => {
   const docRef = doc(db, COLLECTION_NAME, docId);
   const docSnap = await getDoc(docRef);
 
   if (!docSnap.exists()) return null;
-  return docSnap.data();
+  return docSnap.data() as Omit<SessionData, "id">;
 };

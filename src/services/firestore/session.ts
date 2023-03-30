@@ -6,7 +6,7 @@ import { ISession } from "@/stores/session-store";
 // export const getSessionById = async (id: string): any => {
 // };
 
-export const getSessionById = async (id: string): Promise<any> => {
+export const getSessionById = async (id: string): Promise<SessionData | null> => {
   const docRef = doc(db, COLLECTION_NAME, id);
   const docSnap = await getDoc(docRef);
 
@@ -14,7 +14,7 @@ export const getSessionById = async (id: string): Promise<any> => {
 
   return {
     id: docSnap.id,
-    ...docSnap.data(),
+    ...docSnap.data() as Omit<SessionData, "id">,
   };
 };
 export const createSession = async (id: string, name: string): Promise<void> => {
@@ -33,13 +33,20 @@ export const createSession = async (id: string, name: string): Promise<void> => 
     queue: [],
   })
 }
+export const isCurrentSessionNotInParticipant = async(id: string, name: string): Promise<boolean> => {
+  const sessionRef = await getDoc(doc(db, COLLECTION_NAME, id))
+  if (!sessionRef.exists()) return false
+  const sessionData = sessionRef.data() as SessionData
+  return sessionData.participants.find(participant => participant.name === name) === undefined
+} 
+
 export const addParticipant = async(id: string, name:string): Promise<void> => {
   await updateDoc(doc(db, COLLECTION_NAME, id), {
     participants: arrayUnion({name}) 
   })
 }
 
-interface SessionData extends ISession {
+export interface SessionData extends ISession {
     name: string | null,
     participants: {
       name: string | null

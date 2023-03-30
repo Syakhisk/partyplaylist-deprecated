@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  plugins: ["@typescript-eslint", "react"],
+  plugins: ["@typescript-eslint", "react", "react-hooks"],
   extends: [
     "eslint:recommended",
     "plugin:react/recommended",
@@ -8,11 +8,9 @@ module.exports = {
   ],
   parser: "@typescript-eslint/parser",
   rules: {
-    "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
-    "no-unused-vars": "off",
-    "no-debugger": "off",
-    "@typescript-eslint/no-empty-function": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn", 
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
