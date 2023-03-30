@@ -23,11 +23,9 @@ export const getMetadataFromUrl = async (
 
   try {
     const parsedUrl = new URL(url);
-    // if (!["youtube.com", "youte.be"].includes(parsedUrl.hostname))
-    //   throw new Error("Only youtube.com or youtu.be are valid url");
     let id: string | null = null;
 
-    if (parsedUrl.hostname.includes("youtu.be")) id = parsedUrl.pathname;
+    if (parsedUrl.hostname.includes("youtu.be")) id = parsedUrl.pathname.substring(1);
     else id = new URLSearchParams(parsedUrl.searchParams).get("v");
 
     if (!id) throw new Error("No video id found");
