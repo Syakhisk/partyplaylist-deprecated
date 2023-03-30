@@ -7,7 +7,7 @@ import { getSnapshot } from "@/services/firestore";
 import { subscribeToSession } from "@/services/firestore/session";
 import { VideoMetadata } from "@/services/youtube";
 import { setPlayingStatus, YTPlaybackStatus } from "@/stores/player-store";
-import useQueueStore, { setQueue } from "@/stores/queue-store";
+import { setQueue } from "@/stores/queue-store";
 import useSessionStore, {
   setCurrentSong,
   setSession,
@@ -20,7 +20,6 @@ const Listen = () => {
   const { sessionId } = useParams();
   const isLogin = useSessionStore((s) => s.isLogin);
   const [isOpen, setIsOpen] = useState(!isLogin);
-  const queue = useQueueStore((s) => s.queue);
   const isHost =
     useSessionStore.getState().username ===
     useSessionStore.getState().session.host;
@@ -46,7 +45,7 @@ const Listen = () => {
       }
       setPlayingStatus(data.current_song?.status as unknown as YTPlaybackStatus ?? null);
     });
-  }, [sessionId, queue]);
+  }, [sessionId]);
 
   useEffect(() => {
     setLoadingEnum("loading");
