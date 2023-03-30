@@ -10,6 +10,8 @@ type InputProps = {
   helperText?: string;
   id: string;
   required?: boolean;
+  type?: string;
+  readOnly?: boolean;
 };
 
 const Input = (props: Props) => {

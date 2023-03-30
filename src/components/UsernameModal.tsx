@@ -22,6 +22,7 @@ const UsernameModal = ({ isOpen, setIsOpen, sessionId }: Props) => {
     if (typeof sessionId === "undefined") {
       const newSessionId = await getHash();
       await createSession(newSessionId, data.username);
+      await addParticipant(newSessionId, data.username);
       setSession({
         id: newSessionId,
         host: data.username,

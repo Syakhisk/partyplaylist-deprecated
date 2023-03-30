@@ -4,8 +4,11 @@ import Player from "@/components/Player";
 import Queue from "@/components/Queue";
 import UsernameModal from "@/components/UsernameModal";
 import { getSnapshot } from "@/services/firestore";
-import { subscribeToSession } from "@/services/firestore/session";
-import { VideoMetadata } from "@/services/youtube";
+import {
+  addParticipant,
+  isCurrentSessionNotInParticipant,
+  subscribeToSession,
+} from "@/services/firestore/session";
 import { setPlayingStatus, YTPlaybackStatus } from "@/stores/player-store";
 import { setQueue } from "@/stores/queue-store";
 import useSessionStore, {
@@ -19,10 +22,9 @@ const Listen = () => {
   const navigate = useNavigate();
   const { sessionId } = useParams();
   const isLogin = useSessionStore((s) => s.isLogin);
+  const username = useSessionStore((s) => s.username);
   const [isOpen, setIsOpen] = useState(!isLogin);
-  const isHost =
-    useSessionStore.getState().username ===
-    useSessionStore.getState().session.host;
+  const isHost = username === useSessionStore.getState().session.host;
   const [loadingEnum, setLoadingEnum] = useState<
     "loading" | "ready" | "invalid"
   >();
@@ -38,12 +40,14 @@ const Listen = () => {
 
   useEffect(() => {
     if (!sessionId) return;
-    return subscribeToSession(sessionId, async (data) => {
+    return subscribeToSession(sessionId, (data) => {
       setCurrentSong(data.current_song?.id ?? null);
       if (sessionId) {
         setQueue(data.queue);
       }
-      setPlayingStatus(data.current_song?.status as unknown as YTPlaybackStatus ?? null);
+      setPlayingStatus(
+        (data.current_song?.status as unknown as YTPlaybackStatus) ?? null
+      );
     });
   }, [sessionId]);
 
@@ -64,15 +68,18 @@ const Listen = () => {
         return;
       }
 
+      if (username && await isCurrentSessionNotInParticipant(sessionId, username)) {
+          await addParticipant(sessionId, username);
+      }
       setSession({
         host: snapshot.host,
         id: sessionId,
       });
 
-      setQueue(snapshot.queue as VideoMetadata[]);
+      setQueue(snapshot.queue);
       setLoadingEnum("ready");
     })();
-  }, [window.location.pathname]);
+  }, [navigate, sessionId, username]);
 
   return (
     <div className="max-w-4xl border mx-auto h-screen overflow-hidden flex flex-col">
