@@ -1,17 +1,22 @@
 import { useEffect } from "react";
-import useFirestore from "./stores";
 import { RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { router } from "./router";
+import { logout } from "@/stores/session-store";
 
 function App() {
-  const subscribe = useFirestore((s) => s.subscribe);
   // const data = useFirestore((s) => s.data);
 
   useEffect(() => {
-    const unsubscribe = subscribe();
-    return unsubscribe;
-  }, [subscribe]);
+    const removeUserSession = (): void => {
+      logout();
+    };
+    window.addEventListener("beforeunload", removeUserSession);
+
+    return () => {
+      window.removeEventListener("beforeunload", removeUserSession)
+    }
+  }, []);
 
   return (
     <>
