@@ -2,21 +2,26 @@ import { useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { router } from "./router";
-import { logout } from "@/stores/session-store";
+import useSessionStore, { logout } from "@/stores/session-store";
+import { removeParticipant } from "@/services/firestore/session";
 
 function App() {
-  // const data = useFirestore((s) => s.data);
+  const username = useSessionStore(s => s.username)
+  const sessionId = useSessionStore(s => s.session.id)
 
   useEffect(() => {
-    const removeUserSession = (): void => {
+    const removeUserSession = async (): Promise<void> => {
       logout();
+      if (sessionId && username) {
+        await removeParticipant(sessionId, username)
+      }
     };
     window.addEventListener("beforeunload", removeUserSession);
 
     return () => {
       window.removeEventListener("beforeunload", removeUserSession)
     }
-  }, []);
+  }, [sessionId, username]);
 
   return (
     <>
