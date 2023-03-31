@@ -41,7 +41,7 @@ const Listen = () => {
   useEffect(() => {
     if (!sessionId) return;
     return subscribeToSession(sessionId, (data) => {
-      setCurrentSong(data.current_song?.id ?? null);
+      setCurrentSong(data.current_song);
       if (sessionId) {
         setQueue(data.queue);
       }
@@ -68,8 +68,11 @@ const Listen = () => {
         return;
       }
 
-      if (username && await isCurrentSessionNotInParticipant(sessionId, username)) {
-          await addParticipant(sessionId, username);
+      if (
+        username &&
+        (await isCurrentSessionNotInParticipant(sessionId, username))
+      ) {
+        await addParticipant(sessionId, username);
       }
       setSession({
         host: snapshot.host,

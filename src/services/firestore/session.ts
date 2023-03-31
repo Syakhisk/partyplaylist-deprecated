@@ -36,6 +36,7 @@ export const createSession = async (
     current_song: {
       id: null,
       status: null,
+      uid: null,
     },
     host: name,
     name: name,

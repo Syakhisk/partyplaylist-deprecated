@@ -9,6 +9,7 @@ const useSessionStore = create<SessionStore>()(
         current_song: {
           id: null,
           status: null,
+          uid: null,
         },
         host: null,
       },
@@ -37,19 +38,27 @@ export const logout = () =>
 //   useSessionStore.setState({ session: { ...session } });
 // };
 
-export const setCurrentSong = (currSong: string | null) => {
-  const session = useSessionStore.getState().session
-  useSessionStore.setState({session: {...session, current_song:{...session.current_song, id: currSong}}})
+export const setCurrentSong = (currentSong: ISession["current_song"]) => {
+  const session = useSessionStore.getState().session;
+  useSessionStore.setState({
+    session: {
+      ...session,
+      current_song: {
+        ...session.current_song,
+        ...currentSong,
+      },
+    },
+  });
 };
 
 export const setSession = (session: ISession | Partial<ISession>) => {
-  const _session = useSessionStore.getState().session
+  const _session = useSessionStore.getState().session;
 
   useSessionStore.setState({
     session: {
       ..._session,
-      ...session
-    }
+      ...session,
+    },
   });
 };
 
@@ -61,6 +70,7 @@ export interface ISession {
   current_song: {
     id: string | null;
     status: number | null;
+    uid: number | null;
   };
 }
 

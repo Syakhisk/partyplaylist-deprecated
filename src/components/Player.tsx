@@ -70,7 +70,7 @@ const Player = () => {
 
   return (
     <div className="w-96 border /opacity-0 /absolute">
-      {typeof currentSong?.id === "string" ? (
+      {currentSong?.id ? (
         <YouTube
           videoId={currentSong.id}
           className={"youtubeContainer"}

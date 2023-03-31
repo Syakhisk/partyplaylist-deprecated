@@ -13,16 +13,19 @@ export async function updatePlayingStatus(
 
 export async function updateSongId(
   id: string,
-  songId: string | null
+  songId: string | null,
+  songUid: number | null,
 ): Promise<void> {
   const currentSong: {
     "current_song.id": string | null;
+    "current_song.uid": number | null;
     status?: number | null;
   } = {
     "current_song.id": songId,
+    "current_song.uid": songUid,
   };
 
-  if (!songId) {
+  if (!songUid) {
     currentSong.status = null;
   }
 

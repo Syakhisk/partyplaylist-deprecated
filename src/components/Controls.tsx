@@ -1,11 +1,11 @@
-
 import {
   YTPlaybackStatus,
   pause,
   play,
   usePlayerStore,
 } from "@/stores/player-store";
-import useQueueStore from "@/stores/queue-store";
+import useQueueStore, { isLastSong, isFirstSong } from "@/stores/queue-store";
+import useSessionStore from "@/stores/session-store";
 import {
   BackwardIcon,
   ForwardIcon,
@@ -18,7 +18,6 @@ const Controls = () => {
   //TODO: only to make build success
   const queue = useQueueStore((s) => s.queue);
   const video = queue[0] ?? {};
-
 
   if (!video)
     return (
@@ -61,7 +60,11 @@ const PlayPauseButton = () => {
   const playingStatus = usePlayerStore((s) => s.playingStatus);
   // const playerAction = usePlayerStore((s) => s.action);
 
-  if ([YTPlaybackStatus.Buffering, YTPlaybackStatus.Playing].includes(playingStatus)) {
+  if (
+    [YTPlaybackStatus.Buffering, YTPlaybackStatus.Playing].includes(
+      playingStatus
+    )
+  ) {
     return <PauseIcon onClick={pause} className="h-8 cursor-pointer" />;
   }
 
@@ -78,7 +81,8 @@ const PrevButton = () => {
 };
 
 const NextButton = () => {
-  // const isLastSong = useSessionStore((s) => s.isLastSong);
+  // const currentSongId = useSessionStore((s) => s.session.current_song.id);
+  // const _isLastSong = currentSongId ? isLastSong(currentSongId) : null
   // const playerAction = usePlayerStore((s) => s.action);
   // const cn = clsx(["h-6", isLastSong() && "opacity-50"]);
   const cn = clsx(["h-6", false && "opacity-50"], "cursor-pointer");
