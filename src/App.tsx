@@ -11,7 +11,7 @@ function App() {
 
   useEffect(() => {
     const removeUserSession = async (): Promise<void> => {
-      logout();
+      // logout();
       if (sessionId && username) {
         await removeParticipant(sessionId, username)
       }

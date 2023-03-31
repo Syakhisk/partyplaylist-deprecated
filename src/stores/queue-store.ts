@@ -51,14 +51,14 @@ export const addQueue = async (video: VideoMetadata) => {
   const { session } = useSessionStore.getState();
   if (!session.id) return;
   const _queue = [...queue];
-  _queue.push(video)
+  _queue.push(video);
 
-  useQueueStore.setState({queue: _queue})
+  useQueueStore.setState({ queue: _queue });
   await updateQueue(session.id, _queue);
   if (_queue?.length === 1) {
-    await updateSongId(session.id, _queue[0].video_id)
+    await updateSongId(session.id, _queue[0].video_id);
   }
-}
+};
 export const removeQueue = async (uid?: number) => {
   if (!uid) return;
   const { queue } = useQueueStore.getState();
@@ -70,7 +70,7 @@ export const removeQueue = async (uid?: number) => {
   const _queue = [...queue];
   _queue.splice(videoIdx, 1);
   if (videoIdx === 0) {
-      await updateSongId(session.id, _queue.at(0)?.video_id ?? null);
+    await updateSongId(session.id, _queue.at(0)?.video_id ?? null);
   }
   useQueueStore.setState({ queue: _queue });
   await updateQueue(session.id, _queue);
@@ -96,6 +96,24 @@ export const queueDown = async (uid?: number) => {
   await updateQueue(session.id, _queue);
 
   if (videoIdx === 0 && _queue[0].video_id) {
+    await updateSongId(session.id, _queue[0].video_id);
+  }
+};
+
+export const nextSongInQueue = async () => {
+  const { queue } = useQueueStore.getState();
+  const { session } = useSessionStore.getState();
+  if (!session.id) return;
+
+  const _queue = [...queue];
+  const song = _queue.shift();
+
+  if (!song) return;
+  _queue.push(song)
+
+  useQueueStore.setState({ queue: _queue });
+  await updateQueue(session.id, _queue);
+  if (_queue[0]?.video_id) {
     await updateSongId(session.id, _queue[0].video_id);
   }
 };
