@@ -1,7 +1,6 @@
-// import { useEffect, useState } from "react";
 import YouTube, { YouTubeEvent } from "react-youtube";
-// import usePlayerStore from "@/stores/player-store";
 import useSessionStore from "@/stores/session-store";
+import useQueueStore, { nextSongInQueue } from "@/stores/queue-store";
 import {
   YTPlaybackStatus,
   setPlayingStatus,
@@ -14,8 +13,15 @@ const Player = () => {
   const player = usePlayerStore((s) => s.player);
   const playerStatus = usePlayerStore((s) => s.playingStatus);
   const currentSong = useSessionStore((s) => s.session.current_song);
-  const handleStateChange = (event: YouTubeEvent<number>): void => {
+  const handleStateChange = async (
+    event: YouTubeEvent<number>
+  ): Promise<void> => {
+    const { queue } = useQueueStore.getState();
     if (event.data === YTPlaybackStatus.Ended) {
+      if (queue.length > 0) {
+        await nextSongInQueue();
+      }
+
       setPlayingStatus(YTPlaybackStatus.Unstarted);
     }
   };
@@ -70,10 +76,8 @@ const Player = () => {
           className={"youtubeContainer"}
           opts={{
             playerVars: {
-              // autoplay: 1,
-              // mute: isMuted ? 1 : 0,
-              // mute: isMuted ? 1 : 0,
-              autoplay: 0,
+              // autoplay: currentSong.status === YTPlaybackStatus.Playing ? 1 : 0,
+              autoplay: 1,
               controls: 0,
               modestbranding: 1,
               enablejsapi: 1,
@@ -98,7 +102,9 @@ const Player = () => {
           // onPlaybackRateChange={func} // defaults -> noop
           // onPlaybackQualityChange={func} // defaults -> noop
         />
-      ) : <p>Currently no song in the queue</p>}
+      ) : (
+        <p>Currently no song in the queue</p>
+      )}
     </div>
   );
 };
